@@ -3,8 +3,10 @@
 \usepackage{tikz} 
 \usetikzlibrary{automata, positioning, arrows} 
 
+\usepackage{amssymb}
 \usepackage{amsthm}
 \usepackage{amsfonts}
+\usepackage{hyperref}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{fullpage}
@@ -106,15 +108,103 @@ Do not change the template (fontsize, width of margin, spacing of lines, etc) wi
 
 \subsection{Week 1}
 
-(Delete:) Week 1 aligns with the first week of the semester. 
+In week 1 we studied an introduction to discrete math, with a focus on natural numbers and understanding succession. 
 
-If you think that the writing flows better if you merge the sections ``Notes'' and ``Homework'', you can do so, but keep the heading for ``Comments and Questions''.
+\subsubsection*{Notes and Homework}
 
-\subsubsection*{Notes}
+\subsubsection{HW Problem 5:}
 
-(Delete and Replace): You should use this section to write your own notes and showcase your own understanding.\footnote{Here are some hints. Why is this material included in the course? What are the big questions that motivate the study of this subject? How does this material connect to broader themes or issues in the field? What practical or theoretical problems can be addressed through an understanding of these topics? A great way to test whether you understand the material is to make your own exercises and answer them.} Material related to but going beyond what we do in class is welcome.
+\textbf{Problem:} We should define \( a + 0 \) to be \( a \) for any number \( a \).
 
-Feel free to use your favourite LLM to help you build a mental landscape of the subject. Think of LLMs as an extension of Wikipedia and Google, a tool you should be using as introduction to any subject. If you didnt check with Google, Wikipedia and GPT, you are not ready to write your own notes. On the other hand, while using these resources is necessary, you need to always exercise your own critical thinking and you are always responsible for what you write. 
+\[ a + (b + 0) + (c + 0) = a + b + c. \]
+
+\textbf{Assumption:} \( a, b, c \in \mathbb{N} \)
+
+\textbf{Solution:}
+\begin{align*}
+1. &\ \text{rw [add\_zero b]}  \rightarrow  a + b + (c + 0) = a + b + c \\
+2. &\ \text{rw [add\_zero c]}  \rightarrow  a + b + c = a + b + c \\
+3. &\ \text{rfl}
+\end{align*}
+
+\textbf{Explanation:}\\
+On line 1, I apply the \emph{add\_zero} proof using the \emph{rw} tactic to the variable \( b \).\\
+On line 2, I apply the \emph{add\_zero} proof using the \emph{rw} tactic to the variable \( c \).\\
+On line 3, the equation is now identical on both sides, so I close the problem using reflexivity (\emph{rfl}).
+
+
+\subsubsection{HW Problem 6:}
+
+\textbf{Problem:} Learn how to tell Lean to change \( c + 0 \) first by giving \texttt{add\_zero} an explicit input.
+
+\[ a + (b + 0) + (c + 0) = a + b + c. \]
+
+\textbf{Assumption:} \( a, b, c \in \mathbb{N} \)
+
+\textbf{Solution:}
+\begin{align*}
+1. &\ \text{rw [add\_zero c]} \\
+2. &\ \text{rw [add\_zero]} \\
+3. &\ \text{rfl}
+\end{align*}
+
+\textbf{Explanation:} \\
+In this problem, we first tell Lean to simplify \( c + 0 \) by explicitly giving the \emph{add\_zero} proof to \( c \). Then, we apply the \emph{add\_zero} proof to the remaining expression. Finally, since both sides of the equation are now identical, we conclude the proof using reflexivity (\emph{rfl}).
+
+\subsubsection{HW Problem: 7}
+
+\textbf{Problem:} Let's prove that \(\text{succ } n = n + 1\) for any natural number \( n \).
+
+\textbf{Assumption:} \( n \in \mathbb{N} \)
+
+\textbf{Solution:}
+\begin{align*}
+1. &\ \text{rw [one\_eq\_succ\_zero]} & \text{Apply the definition of 1:} \quad 1 = \text{succ } 0 \\
+2. &\ \text{rw [add\_succ]} & \text{Apply the add\_succ lemma:} \quad n + \text{succ } m = \text{succ } (n + m) \\
+3. &\ \text{rw [add\_zero]} & \text{Simplify using add\_zero:} \quad n + 0 = n \\
+4. &\ \text{rfl} & \text{The equation now reflects, so the proof is complete.}
+\end{align*}
+
+\textbf{Explanation:} \\
+In this proof, we proceed through the following steps:
+\begin{enumerate}
+    \item We first rewrite 1 as \(\text{succ } 0\) using the identity \( 1 = \text{succ } 0 \).
+    \item Next, we apply the add\_succ lemma, which states that \( n + \text{succ } m = \text{succ } (n + m) \).
+    \item We then simplify using the add\_zero lemma, which tells us that adding zero to a number \( n \) gives us \( n \).
+    \item Finally, we conclude the proof with reflexivity (\emph{rfl}), as both sides of the equation are identical.
+\end{enumerate}
+
+\textbf{Relation to Corresponding Mathematical Proof:} \\
+This proof exercise using lean relates the the mathematical proof of Natural numbers when we use the succession identity to state that 1 is equal to the succession of zero. This is only posible to do so because of the seconf postulate of natural numbers which states: "Predeccessors are Unique". Without the unique nature of predeccessors of natural numbers, it would not be possible to define a number by its natural successor like we do here. This postulate is stated on page 17 of 'Contemporary Discrete Mathematics' by Moshier.
+
+
+\subsubsection{HW Problem: 8}
+
+\textbf{Problem:} Let's prove that \(2 + 2 = 4\) using Lean tactics.
+
+\textbf{Solution:}
+\begin{align*}
+1. &\ \text{rw [two\_eq\_succ\_one]} & \text{Rewrite 2 as } \text{succ } 1 \\
+2. &\ \text{rw [add\_succ]} & \text{Apply add\_succ: } n + \text{succ } m = \text{succ } (n + m) \\
+3. &\ \text{rw [succ\_eq\_add\_one]} & \text{Rewrite succ using } n + 1 = \text{succ } n \\
+4. &\ \text{rw [four\_eq\_succ\_three]} & \text{Rewrite 4 as } \text{succ } 3 \\
+5. &\ \text{rw [three\_eq\_succ\_two]} & \text{Rewrite 3 as } \text{succ } 2 \\
+6. &\ \text{rw [two\_eq\_succ\_one]} & \text{Rewrite 2 as } \text{succ } 1 \\
+7. &\ \text{repeat rw [succ\_eq\_add\_one]} & \text{Apply the successor identity repeatedly to simplify the expression} \\
+8. &\ \text{rfl} & \text{The equation is now identical on both sides, completing the proof.}
+\end{align*}
+
+\textbf{Explanation:} \\
+In this proof, we proceed step by step as follows:
+\begin{enumerate}
+    \item We start by rewriting \(2\) as \(\text{succ } 1\).
+    \item Then, we apply the \texttt{add\_succ} lemma to handle the addition of a successor.
+    \item We rewrite the successor using the identity \(\text{succ } n = n + 1\).
+    \item We then rewrite \(4\) as \(\text{succ } 3\) and continue this process for \(3\) and \(2\).
+    \item The \texttt{succ\_eq\_add\_one} lemma is applied repeatedly to reduce the expression to a simpler form.
+    \item Finally, we close the proof using reflexivity (\emph{rfl}) because both sides of the equation are now equal.
+\end{enumerate}
+
 
 \subsubsection*{Homework}
 
@@ -141,12 +231,10 @@ Also explain what you learn from the homework. Each homework was carefully draft
 %By the way, GPT-4 is quite good at outputting tikz code.
 
 \subsubsection*{Comments and Questions}
+Summary: This week we had an introduction to the course in general, and then we moved on to an introduction and review of discrete math. We focused on learning to prove basic theories about natural numbers and addition using an online system. This week we discussed how discrete math is very similar in programming in its structure. I especially thought it was interesting in the lecture notes when it differentiated between a definition of a process and an algorithm. Where I see definitions being utilized more in discrete math and algorithms being utilized more in computer science. 
 
-(Delete and Replace:) Here you should write your own critical reflection on the content of the week. If you can surprise me with something I have not seen before, you are on the right track.
+Question of the week: I have recently studied a boom in the Materials Science sector in the last year that came from AI led research methods, in which they were able to generate 10x more materials in a year than had ever before been created by having a deep learning network come up with potential combinations for new stable chemical formulas. Because of the speed and persistince of the network, it was able to vastly outperform human counterparts. Materials science shares some common factors with math because every chemical formula starts with the most basic atomic building blocks, just as mathematical proofs start by establinsing the most basic mathematical building blocks and then adding on from there. By applying the same methods emphasizing the speed and persistence of deep learning networks, can we expect a similar boom in new mathematical theories in the near future?  
 
-%I expect you to read the lecture notes. 
-
-Ask at least one \textbf{interesting question}\footnote{It is important to learn to ask \emph{interesting} questions. There is no precise way of defining what is meant by interesting. You can only learn this by doing. An interesting question comes typically in two parts. Part 1 (one or two sentences) sets the scene. Part 2 (one or two sentences) asks the question. A good question strikes the right balance between being specific and technical on the one hand and open ended on the other hand. A question that can be answered with yes/no is not an interesing question.} on the lecture notes. Also post the question on the Discord channel so that everybody can see and discuss the questions.
 
 \subsection{Week 2}
 
